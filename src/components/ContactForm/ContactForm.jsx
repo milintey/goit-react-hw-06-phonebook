@@ -1,23 +1,11 @@
-import PropTypes from 'prop-types';
-import styled from 'styled-components';
+import { useDispatch } from 'react-redux';
 import { nanoid } from 'nanoid';
-import { Formik, Form, Field, ErrorMessage } from 'formik';
+import { Formik, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
-import { FormButton } from './ContactForm.styled';
+import { FormButton, FormInput } from './ContactForm.styled';
+import { addContact } from 'redux/actions';
 
 // СТИЛИ ФОРМЫ
-
-const FormInput = styled(Field)`
-  height: 30px;
-  width: 200px;
-  border: 1px solid rgba(33, 33, 33, 0.2);
-  border-radius: 4px;
-  outline: none;
-  margin-right: ${p => p.theme.space[4]}px;
-  :focus {
-    border-color: ${p => p.theme.colors.primary};
-  }
-`;
 
 // КОНЕЦ СТИЛЕЙ ФОРМЫ
 
@@ -31,14 +19,18 @@ const initialValues = {
   number: '',
 };
 
-export const ContactForm = ({ onAddContact }) => {
+export const ContactForm = () => {
+  const dispatch = useDispatch();
+
   const formSubmit = (value, { resetForm }) => {
     const contact = {
       ...value,
       id: nanoid(),
     };
+
+    dispatch(addContact(contact));
+    console.log(addContact(contact));
     console.log(contact);
-    onAddContact(contact);
     resetForm();
   };
 
@@ -73,10 +65,6 @@ export const ContactForm = ({ onAddContact }) => {
       </Form>
     </Formik>
   );
-};
-
-ContactForm.propTypes = {
-  onAddContact: PropTypes.func.isRequired,
 };
 
 // import {
