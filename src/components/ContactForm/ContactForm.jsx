@@ -4,6 +4,8 @@ import { Formik, Form, ErrorMessage } from 'formik';
 import * as yup from 'yup';
 import { FormButton, FormInput } from './ContactForm.styled';
 import { addContact } from 'redux/actions';
+import { useSelector } from 'react-redux';
+import { contactsState } from 'redux/selectors';
 
 // СТИЛИ ФОРМЫ
 
@@ -21,6 +23,7 @@ const initialValues = {
 
 export const ContactForm = () => {
   const dispatch = useDispatch();
+  const contactsItem = useSelector(contactsState);
 
   const formSubmit = (value, { resetForm }) => {
     const contact = {
@@ -28,9 +31,17 @@ export const ContactForm = () => {
       id: nanoid(),
     };
 
+    if (contactsItem.some(cont => cont.name === contact.name)) {
+      alert(`${contact.name} is already in contacts`);
+      return;
+    }
+
+    if (contactsItem.some(cont => cont.number === contact.number)) {
+      alert(`User number ${contact.number} already exists`);
+      return;
+    }
+
     dispatch(addContact(contact));
-    console.log(addContact(contact));
-    console.log(contact);
     resetForm();
   };
 
@@ -66,22 +77,3 @@ export const ContactForm = () => {
     </Formik>
   );
 };
-
-// import {
-//   persistStore,
-//   persistReducer,
-//   FLUSH,
-//   REHYDRATE,
-//   PAUSE,
-//   PERSIST,
-//   PURGE,
-//   REGISTER,
-// } from 'redux-persist';
-// import storage from 'redux-persist/lib/storage';
-
-// middleware: getDefaultMiddleware =>
-//     getDefaultMiddleware({
-//       serializableCheck: {
-//         ignoredActions: [FLUSH, REHYDRATE, PAUSE, PERSIST, PURGE, REGISTER],
-//       },
-//     }),

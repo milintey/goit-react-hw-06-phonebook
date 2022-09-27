@@ -11,7 +11,6 @@ const initialState = {
 
 export const contactsReducer = createReducer(initialState, {
     [addContact]: (state, action) => {
-      console.log(state);
         state.items.push(action.payload);
     },
     [deleteContact]: (state, action) => {

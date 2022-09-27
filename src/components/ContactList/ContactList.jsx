@@ -8,31 +8,34 @@ import {
   ContactText,
 } from '../ContactList/ContactList.styled';
 
-export function ContactList() {
+export const ContactList = () => {
   const dispatch = useDispatch();
-  const contactsItem = useSelector(contactsState);
 
+  const contactsItem = useSelector(contactsState);
   const filter = useSelector(filterState);
 
   const contacts = filterContact(contactsItem, filter);
-  console.log(contacts);
 
   return (
     <div>
       <h2>Contacts</h2>
       <ul>
-        {contacts.map(({ id, name, number }) => {
-          return (
-            <ContactItem key={id}>
-              <ContactText>{name}: </ContactText>
-              <ContactText>{number}</ContactText>
-              <Button onClick={() => dispatch(deleteContact(id))} type="button">
-                Delete
-              </Button>
-            </ContactItem>
-          );
-        })}
+        {contacts &&
+          contacts.map(({ id, name, number }) => {
+            return (
+              <ContactItem key={id}>
+                <ContactText>{name}: </ContactText>
+                <ContactText>{number}</ContactText>
+                <Button
+                  onClick={() => dispatch(deleteContact(id))}
+                  type="button"
+                >
+                  Delete
+                </Button>
+              </ContactItem>
+            );
+          })}
       </ul>
     </div>
   );
-}
+};
